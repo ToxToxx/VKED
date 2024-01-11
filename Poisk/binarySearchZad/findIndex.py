@@ -13,9 +13,9 @@ def search_insert_position(nums, target):
     return left
 
 if __name__ == "__main__":
-    n = int(input())
-    nums = list(map(int, input().split()))
-    target = int(input())
+    countOfElements = int(input())
+    numbers = list(map(int, input().split()))
+    searchableNumber = int(input())
 
-    result = search_insert_position(nums, target)
-    print(result)
+    foundIndex = search_insert_position(numbers, searchableNumber)
+    print(foundIndex)

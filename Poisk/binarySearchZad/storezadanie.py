@@ -15,7 +15,7 @@ def binary_search(arr, target):
     
     print("false")
 
-n = int(input())
+countOfElements = int(input())
 prices = list(map(int, input().split()))
 target_price = int(input())
 

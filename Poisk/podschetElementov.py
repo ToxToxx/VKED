@@ -14,9 +14,9 @@ def majority_element(arr):
     
     return -1
 
-n = int(input())
+countOfElements = int(input())
 
-arr = list(map(int, input().split()))
+listOfNumbers = list(map(int, input().split()))
 
-result = majority_element(arr)
-print(result)
+majority_number = majority_element(listOfNumbers)
+print(majority_number)
