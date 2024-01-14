@@ -3,7 +3,7 @@ def has_triangle(graph):
         neighbors = graph[node]
         for neighbor1 in neighbors:
             for neighbor2 in neighbors:
-                if neighbor1 != neighbor2 and neighbor2 in graph[neighbor1]:
+                if neighbor1 != neighbor2 and neighbor2 in graph.get(neighbor1, set()):
                     return "YES"
     return "NO"
 
