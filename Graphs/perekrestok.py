@@ -1,4 +1,5 @@
 def dijkstra(graph, start, end):
+    # Инициализация
     infinity = float('inf')
     shortest_paths = {vertex: (infinity, None) for vertex in graph}
     shortest_paths[start] = (0, None)
@@ -7,7 +8,7 @@ def dijkstra(graph, start, end):
 
     while current_vertex != end:
         visited.add(current_vertex)
-        destinations = graph[current_vertex]
+        destinations = graph.get(current_vertex, {})  # Используем get для избежания ошибки, если вершина отсутствует в графе
         weight_to_current_vertex = shortest_paths[current_vertex][0]
 
         for next_vertex, weight in destinations.items():
@@ -19,17 +20,22 @@ def dijkstra(graph, start, end):
         if not next_destinations:
             break
 
+        # Выбор следующей вершины для посещения
         current_vertex = min(next_destinations, key=lambda k: next_destinations[k][0])
 
+    # Построение пути
     path, current_vertex = [], end
     while current_vertex is not None:
         path.append(current_vertex)
+        if current_vertex not in shortest_paths:
+            break
         next_vertex = shortest_paths[current_vertex][1]
         current_vertex = next_vertex
     path = path[::-1]
 
-    return path, shortest_paths[end][0]
+    return path, shortest_paths.get(end, (float('inf'),))[0]  # Используем get для избежания ошибки, если вершина отсутствует в словаре
 
+# Ввод данных
 N = int(input())
 graph = {}
 
@@ -44,5 +50,10 @@ for _ in range(N):
 
 start, end = map(int, input().split())
 
+# Вызов функции и вывод результата
 path, shortest_distance = dijkstra(graph, start, end)
-print(shortest_distance)
+
+if shortest_distance == float('inf'):
+    print('''"No path found"''')
+else:
+    print(shortest_distance)
