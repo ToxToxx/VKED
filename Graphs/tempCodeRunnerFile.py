@@ -1,48 +1,37 @@
-def dijkstra(graph, start, end):
-    infinity = float('inf')
-    shortest_paths = {vertex: (infinity, None) for vertex in graph}
-    shortest_paths[start] = (0, None)
-    current_vertex = start
-    visited = set()
+class Edge:
+    def __init__(self, source, destination, weight):
+        self.source = source
+        self.destination = destination
+        self.weight = weight
 
-    while current_vertex != end:
-        visited.add(current_vertex)
-        destinations = graph[current_vertex]
-        weight_to_current_vertex = shortest_paths[current_vertex][0]
+def bellman_ford(edges, num_vertices, source):
+    distance = [float('inf')] * num_vertices
+    distance[source] = 0
 
-        for next_vertex, weight in destinations.items():
-            weight_to_neighbour = weight_to_current_vertex + weight
-            if weight_to_neighbour < shortest_paths[next_vertex][0]:
-                shortest_paths[next_vertex] = (weight_to_neighbour, current_vertex)
+    # Relax edges repeatedly
+    for _ in range(num_vertices - 1):
+        for edge in edges:
+            if distance[edge.source] != float('inf') and distance[edge.source] + edge.weight < distance[edge.destination]:
+                distance[edge.destination] = distance[edge.source] + edge.weight
 
-        next_destinations = {vertex: shortest_paths[vertex] for vertex in shortest_paths if vertex not in visited}
-        if not next_destinations:
-            break
+    # Check for negative cycles
+    for edge in edges:
+        if distance[edge.source] != float('inf') and distance[edge.source] + edge.weight < distance[edge.destination]:
+            print("Граф содержит отрицательный цикл")
+            return
 
-        current_vertex = min(next_destinations, key=lambda k: next_destinations[k][0])
+    # Print the shortest distances
+    for i in range(num_vertices):
+        print(f"Вершина: {i + 1}, Расстояние: {'бесконечность' if distance[i] == float('inf') else distance[i]}")
 
-    path, current_vertex = [], end
-    while current_vertex is not None:
-        path.append(current_vertex)
-        next_vertex = shortest_paths[current_vertex][1]
-        current_vertex = next_vertex
-    path = path[::-1]
+if __name__ == "__main__":
+    num_edges = int(input())
+    edges = []
 
-    return path, shortest_paths[end][0]
+    for _ in range(num_edges):
+        u, v, weight = map(int, input().split())
+        edges.append(Edge(u - 1, v - 1, weight))
 
-N = int(input())
-graph = {}
+    source = int(input())
 
-for _ in range(N):
-    u, v, weight = map(int, input().split())
-    if u not in graph:
-        graph[u] = {}
-    if v not in graph:
-        graph[v] = {}
-    graph[u][v] = weight
-    graph[v][u] = weight
-
-start, end = map(int, input().split())
-
-path, shortest_distance = dijkstra(graph, start, end)
-print(shortest_distance)
+    bellman_ford(edges, max(max(e.source, e.destination) for e in edges) + 1, source - 1)
