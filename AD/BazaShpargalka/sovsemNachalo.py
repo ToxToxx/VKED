@@ -68,5 +68,36 @@ print(a)
 a = [str(i) + "k" for i in range(10) if i % 2 == 0]
 print(a)
 
-#кортежи
+#кортежи - неизменяемы и быстры
 print("             Кортежи             ")
+b = (1, 2, 3)
+print(b)
+
+#множества - набор уникальный элементов в случайном порядке
+print("             Сеты             ")
+c = {1, 3, 5 ,6}
+d = {1, 6 , 4, 2}
+print(c & d)
+
+#словари
+print("             Словари             ")
+e = {1 : "Russia", 2 : "Kazahstan"}
+print(e.keys())
+print(e.values())
+
+#функции
+print("             Функция             ")
+def add(x,y):
+    return x + y
+
+print(add(2,3))
+
+def returnArgs(*args):
+    return args
+
+print(returnArgs("a", 12, 12.03, "PRIVET", 2 + 2))
+
+def returnKwargs(**kwargs):
+    return kwargs
+
+print(returnKwargs(a = 1, c = 3, g = 4))
