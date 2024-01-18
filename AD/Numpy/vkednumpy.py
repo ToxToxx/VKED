@@ -76,3 +76,26 @@ arr3d = np.array([[[1,2,3],[4,5,8]],[[7,8,1],[9,10,100]]])
 print(arr3d.shape)
 print(arr3d.T)
 print(arr3d.T.shape)
+
+#поэлементыне операции над массивами
+print("       ПОЭЛЕМЕНТНЫЕ ОПЕРАЦИИ НАД МАССИВАМИ             ")
+arr3d = np.array([[[1,2,3],[4,5,8]],[[7,8,1],[9,10,100]]])
+print(np.sqrt(arr3d))
+print(np.exp(arr3d))
+
+#математические и статистичечкие операции
+print("     МАТЕМАТИЧЕСКИЕ И СТАТЕСТИЧЕСКИЕ ОПЕРАЦИИ         ")
+arr = np.random.randn(5,4)
+print(arr)
+print("Форма", arr.shape)
+print("Среднее", arr.mean())
+print("Сумма: ", arr.sum())
+print("Максимум: ", np.max(arr))
+print("Сумма по оси", arr.sum(axis = 1))
+arr = np.array([[0,1,2], [3,4,5], [9,8,11]])
+print("Новый массив\n", arr)
+print("Коммулятиваня сумма: ", arr.cumsum(axis = 0))
+print("Коммулятивное произведение: ", arr.cumprod(axis = 0))
+
+#СОРТИРОВКА
+print("    СОРТИРОВКА         ")
