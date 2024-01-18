@@ -36,3 +36,28 @@ knife = Knife("Zatochka", 5)
 
 print(hammer.dealDamage())
 print(knife.dealDamage())
+
+#Инкапсуляция
+class Circle:
+    def __init__(self, radius):
+        self.__radius = radius #двойное подчеркивание для инкапсуляции
+
+    def get_radius(self):
+        return self.__radius
+    
+    def set_radius(self, new_radius):
+        if new_radius >= 0:
+            self.__radius = new_radius
+    
+    def area(self):
+        return 3.14159 * self.__radius ** 2
+
+circle = Circle(5)
+
+#использование геттера и сеттера
+print(circle.get_radius())
+print(f"Площадь круга: {circle.area()}")
+
+circle.set_radius(10)
+print(circle.get_radius())
+print(f"Площадь круга: {circle.area()}")
