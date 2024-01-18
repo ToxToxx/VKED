@@ -99,3 +99,26 @@ print("Коммулятивное произведение: ", arr.cumprod(axis 
 
 #СОРТИРОВКА
 print("    СОРТИРОВКА         ")
+random_array = np.random.randn(5)
+print("Массив изначальный\n", random_array)
+random_array.sort()
+print("Сортировка\n", random_array)
+random_array = np.random.randn(3,3)
+print("Массив изначальный\n", random_array)
+random_array.sort(1)
+print("Сортировка с учётом столбцов\n", random_array)
+random_array.sort(0)
+print("Сортировка с учётом строк\n", random_array)
+#возвращает копию
+print("Копия отсортированная\n", np.sort(random_array))
+
+#СОХРАНЕНИЕ МАССИВОВ НА ДИСКЕ
+print("    СОХРАНЕНИЕ МАССИВОВ НА ДИСКЕ         ")
+save_array = np.arange(10)
+np.save('saved_array', save_array)
+print(np.load('saved_array.npy'))
+
+save_arrayB = np.arange(5)
+np.savez('saved_arrays_archive', a = save_array, b = save_arrayB)
+arch = np.load('saved_arrays_archive.npz')
+print(arch['b'])
