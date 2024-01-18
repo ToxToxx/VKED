@@ -122,3 +122,13 @@ save_arrayB = np.arange(5)
 np.savez('saved_arrays_archive', a = save_array, b = save_arrayB)
 arch = np.load('saved_arrays_archive.npz')
 print(arch['b'])
+
+#ДЗ
+print("   ДОМАШНЕЕ ЗАДАНИЕ        ")
+dz_array = np.arange(10, 501)
+print(dz_array)
+dz_array = np.square(dz_array)
+print(dz_array)
+dz_array = dz_array - 234
+print(dz_array)
+print(np.sum(dz_array))
