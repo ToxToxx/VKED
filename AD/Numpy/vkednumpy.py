@@ -65,3 +65,14 @@ print(arr3d[:1, :1, 1:])
 
 #булевое индексирование
 print("         БУЛЕВОЕ ИНДЕКСИРОВАНИЕ                 ")
+bul_array = np.array(["Ivan", "Petr", "Sergei", "Petr", "Alexey", "Oleg", "Sasha", "Dima"])
+print(bul_array == "Petr")
+mask = (bul_array == "Petr") | (bul_array == "Oleg")
+print(bul_array[mask])
+
+#транспонирование массивов
+print("         ТРАНСПОНИРОВАНИЕ МАССИВОВ                 ")
+arr3d = np.array([[[1,2,3],[4,5,8]],[[7,8,1],[9,10,100]]])
+print(arr3d.shape)
+print(arr3d.T)
+print(arr3d.T.shape)
