@@ -61,3 +61,30 @@ print(f"Площадь круга: {circle.area()}")
 circle.set_radius(10)
 print(circle.get_radius())
 print(f"Площадь круга: {circle.area()}")
+
+
+#Полиморфизм
+class Animal:
+    def __init__(self,name):
+        self.name = name
+
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} это Собака"
+
+class Bear(Animal):
+    def speak(self):
+        return f"{self.name} это Медведь"
+    
+class Bull(Animal):
+    def speak(self):
+        return f"{self.name} это Бык"
+    
+animals = [Dog("Шарик"), Bear("Миша"), Bull("Кексик")]
+
+for animal in animals:
+    print(animal.speak())
+
