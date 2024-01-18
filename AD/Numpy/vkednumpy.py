@@ -40,3 +40,13 @@ example_array = np.array([[1.,2.,3.], [4.,5.,6.]])
 print("1", example_array * example_array)
 print("2", example_array - example_array)
 print("3", 1 / example_array)
+
+#случайные массивы
+print("         МАССИВЫ СЛУЧАЙНЫХ ЧИСЕЛ            Ы")
+random_array = np.random.randn(3,3)
+print("1", random_array)
+random_array = np.random.randint(10, 101, (2,3))
+print("2", random_array)
+
+#индексирование
+print(np.arange(15)[8:13])
