@@ -48,3 +48,15 @@ print(df.loc["Max"])
 print(df.iloc[2])
 print(df.loc[["Max", "Lexa"],"name"])
 print(df.iloc[[0,1], 2])
+
+filters = (df.weight > 70)
+print(df[filters])
+
+df["IMT"] = df["height"] / df["weight"]
+print(df)
+
+print(df.drop(["weight"], axis= 1))
+df = df.rename(columns= {'height' : 'rost'})
+print(df)
+print(df.nlargest(2, 'rost'))
+print(df.nsmallest(1, "IMT"))
