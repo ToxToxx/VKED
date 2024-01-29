@@ -67,6 +67,10 @@ for i in range(2):
     for j in range(2):
         axes[i, j].hist(randn(500), bins = 50, color = 'g', alpha = 0.5 )
 
-plt.subplots_adjust(wspace = 0.0, hspace = 0.0)
+plt.subplots_adjust(wspace = 0.2, hspace = 0.2)
+plt.savefig('fig.png', dpi = 400, bbox_inches = 'tight')
 
 plt.show()
+
+
+
