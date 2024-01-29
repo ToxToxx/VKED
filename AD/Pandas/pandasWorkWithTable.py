@@ -50,5 +50,11 @@ print('     Сортировка\n', df.sort_values(by = ['vendor_id', 'successf
 
 print('     ILOC\n', df.iloc[:, 0:4])
 
-print('Mean ', df[df['vendor_id'] == 40065]['successful_orders'].mean())
-print('Min ', df[df['vendor_id'] == 40065]['successful_orders'].min())
+print('Среднее ', df[df['vendor_id'] == 40065]['successful_orders'].mean())
+print('Минимум ', df[df['vendor_id'] == 40065]['successful_orders'].min())
+
+ #ГРУППИРОВКА ДАННЫХ
+print('Группировка\n ', df.groupby(by = 'city_id')['successful_orders'].max())
+print('Группировка среднее, стандарное отклонение, минимум, максимум\n',
+      df.groupby(by = 'city_id')['successful_orders'].agg([np.mean, np.std, np.min, np.max]))
+print('Получение датафрейма из серии\n ', df.groupby(by = 'city_id')['successful_orders'].mean().reset_index())
