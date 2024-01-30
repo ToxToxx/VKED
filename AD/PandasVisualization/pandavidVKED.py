@@ -36,3 +36,25 @@ df['Cholesterol_bin'] = df['Cholesterol'] // 10 * 10
 fig = plt.figure(figsize= (14,5))
 chart = df['Cholesterol_bin'].value_counts().sort_index().plot.line()
 plt.show()
+
+fig = plt.figure(figsize= (14,5))
+chart = df['Cholesterol_bin'].value_counts().sort_index().plot.area(alpha = 0.5)
+plt.show()
+
+fig = plt.figure(figsize= (14,5))
+df['Age'].plot.hist(bins= 10)
+plt.show()
+#bins указывает количесвто интервалов гистограммы
+fig = plt.figure(figsize= (14,5))
+df['Age'].plot.hist(bins= 20)
+plt.show()
+
+#двумерные данные
+df.plot.scatter(x = 'Cholesterol', y = 'Age', 
+                figsize = (14,5))
+plt.show()
+
+df.plot.hexbin(x = 'Cholesterol', y = 'Age', 
+               figsize = (15, 6), gridsize= 30,
+               cmap = 'Blues')
+plt.show()
