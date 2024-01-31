@@ -45,3 +45,13 @@ plt.show()
 cols = ['Oldpeak', 'MaxHR', 'Cholesterol', 'RestingBP', 'Age']
 sns_plot = sns.pairplot(df[cols])
 plt.show()
+
+#корреляция признаков
+print(df[cols].dropna().corr())
+
+#Тепловая карта
+fig = plt.figure(figsize= (14,5))
+sns.heatmap(df[cols].dropna().corr(), cmap = 'Blues')
+plt.show()
+
+
