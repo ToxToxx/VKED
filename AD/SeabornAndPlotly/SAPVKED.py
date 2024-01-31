@@ -56,4 +56,3 @@ sns.heatmap(df[cols].dropna().corr(), cmap = 'Blues')
 plt.show()
 
 
-#FOLIUM
