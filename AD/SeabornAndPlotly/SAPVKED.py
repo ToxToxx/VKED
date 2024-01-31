@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 df = pd.read_csv("E:/Programming/VKED/AD/SeabornAndPlotly/heart.csv")
 df['Cholesterol'] = np.where(df['Cholesterol'] == 0, np.nan, df['Cholesterol'])
 df['RestingBP'] = np.where(df['RestingBP'] == 0, np.nan, df['RestingBP'])
@@ -55,3 +56,4 @@ sns.heatmap(df[cols].dropna().corr(), cmap = 'Blues')
 plt.show()
 
 
+#FOLIUM
