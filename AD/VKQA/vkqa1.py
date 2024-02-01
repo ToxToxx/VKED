@@ -17,4 +17,9 @@ incomes['operation_day'] = incomes['operation_date'].dt.floor('d')
 answer1 = incomes[
     (incomes['operation_day'] >= pd.Timestamp('2023-02-08')) 
     & (incomes['currency'] == 'USD')]['volume'].max()
-print(answer1)
+print('First answer', answer1)
+
+#выведите средний размер попонений за февраль подневно, в разбивке по валютам
+#Результат - таблица формата дата валюта и размер пополнения с округлением до целого числа
+answer2 = incomes.groupby(['operation_day', 'currency']).agg({'volume': np.mean}).reset_index()
+print('Second \n', answer2)
