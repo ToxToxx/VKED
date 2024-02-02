@@ -23,3 +23,10 @@ print('First answer', answer1)
 #Результат - таблица формата дата валюта и размер пополнения с округлением до целого числа
 answer2 = incomes.groupby(['operation_day', 'currency']).agg({'volume': np.mean}).reset_index()
 print('Second \n', answer2)
+
+#посчитать долю клиентов,у которых были пополнения в нескольких валютах. Округлить до десятых процента
+users_currencies_count = incomes.groupby('user_id')['currency'].nunique().reset_index()
+sum_of_all_currencies_bigger1 = sum(users_currencies_count['currency'] > 1)
+unique_users = incomes['user_id'].nunique()
+answer3 = round((sum_of_all_currencies_bigger1 / unique_users * 100), 1)
+print('Third ', answer3)
