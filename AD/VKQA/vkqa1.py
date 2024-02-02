@@ -54,3 +54,16 @@ first_incomes_with_rate_values['rate_value'] = first_incomes_with_rate_values['r
 answer4 = sum(first_incomes_with_rate_values['volume'] * first_incomes_with_rate_values['rate_value'])
 
 print('Fourth', answer4)
+
+#посчитать каждому клиенту среднюю разницу в днях между пополнениями
+#вывести медианное значение по всем клиентам
+incomes_sorted = incomes.sort_values('operation_date')
+incomes_sorted['prev'] = incomes_sorted.groupby('user_id')['operation_date'].shift(1) #оконная функция
+incomes_with_prev = incomes_sorted.loc[~incomes_sorted['prev'].isnull()] # ~ - не что-то
+
+incomes_with_prev['delta'] = incomes_with_prev['operation_date'] - incomes_with_prev['prev']
+incomes_with_prev_delta = incomes_with_prev.groupby('user_id')['delta'].mean().reset_index()
+incomes_with_prev_delta['delta_days'] = incomes_with_prev_delta['delta'].dt.days
+
+answer5 = incomes_with_prev_delta['delta_days'].median()
+print('Fifth ', answer5)
