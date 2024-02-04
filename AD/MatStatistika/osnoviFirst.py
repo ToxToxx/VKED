@@ -62,7 +62,24 @@ dscr_lst = np.random.randint(0, 100, size = 1000)
 fig = plt.figure(figsize= (15,7))
 ax1 = plt.subplot(121)
 plt.hist(dscr_lst, 100, alpha = 0.8)
-plt.show
+plt.show()
 
 mode = stats.mode(dscr_lst)
 print("Мода: ", mode)
+
+#Квантиль - значение, которое заданная случайная величина 
+#не превышает с фиксированной вероятностью
+#Если в процентах - перцентиль или процентиль
+
+print('Np percentile: ', np.percentile(gen_pop, 75))
+print('Scipy percentile: ', stats.scoreatpercentile(gen_pop, 75))
+
+df_box_plot = pd.DataFrame()
+df_box_plot['gen_pop'] = gen_pop
+df_box_plot['gen_pop_ln'] = gen_pop_ln
+
+fig = plt.figure(figsize = (15,7))
+sns.boxplot(data = df_box_plot, orient = 'h')
+plt.show()
+
+#Среднее арифметическое
