@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
-import scipy as stats
+from scipy import stats
 import numpy as np
 import pandas as pd
 
