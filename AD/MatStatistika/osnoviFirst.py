@@ -83,3 +83,13 @@ sns.boxplot(data = df_box_plot, orient = 'h')
 plt.show()
 
 #Среднее арифметическое
+#генеральная совокупность данных
+mean = np.mean(gen_pop)
+print('Ср. арифм генеральное: ', mean)
+
+#выборочная производим оценку по выборке
+n = 20
+sample = np.random.choice(gen_pop, n, replace = False)
+
+sample_mean = np.mean(sample)
+print('Ср ариф выборки: ', sample_mean)
