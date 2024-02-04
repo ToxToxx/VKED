@@ -29,3 +29,29 @@ fig = plt.figure(figsize = (14,7))
 ax1 = plt.subplot(111)
 plt.hist(gen_pop_ln, 50, alpha = 0.5)
 plt.show()
+
+#Медиана - половина элементов меньше половина больше
+median = np.median(gen_pop)
+median_ln = np.median(gen_pop_ln)
+
+fig = plt.figure(figsize=(15,7))
+ax1 = plt.subplot(111)
+plt.hist(gen_pop, 50, alpha = 0.5)
+line1 = plt.axvline(median, 
+                    label = ('Медиана норм ' + str(round(median, 1))),
+                    color = 'red',
+                    linestyle = 'dashed',
+                    linewidth = 3.5)
+ax1.legend(handles = [line1], fontsize = 20)
+plt.show()
+
+fig = plt.figure(figsize=(15,7))
+ax1 = plt.subplot(111)
+plt.hist(gen_pop_ln, 50, alpha = 0.5)
+line1 = plt.axvline(median_ln, 
+                    label = ('Медиана логнорм ' + str(round(median, 1))),
+                    color = 'red',
+                    linestyle = 'dashed',
+                    linewidth = 3.5)
+ax1.legend(handles = [line1], fontsize = 20)
+plt.show()
