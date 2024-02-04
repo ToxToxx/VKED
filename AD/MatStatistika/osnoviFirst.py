@@ -55,3 +55,14 @@ line1 = plt.axvline(median_ln,
                     linewidth = 3.5)
 ax1.legend(handles = [line1], fontsize = 20)
 plt.show()
+
+#Мода самое часто встречающееся значение во множестве наблюдений
+dscr_lst = np.random.randint(0, 100, size = 1000)
+
+fig = plt.figure(figsize= (15,7))
+ax1 = plt.subplot(121)
+plt.hist(dscr_lst, 100, alpha = 0.8)
+plt.show
+
+mode = stats.mode(dscr_lst)
+print("Мода: ", mode)
