@@ -145,13 +145,30 @@ plt.show()
 n = 20
 sample = np.random.choice(gen_pop, n, replace = False)
 #оценка стандартной ошибки по выборке
-print(stats.sem(sample))
+print('Стандартная ошибка по выборке: ', stats.sem(sample))
 
 fig = plt.figure(figsize = (10, 5))
 
 ax1 = plt.subplot(111)
-plt.hist(gen_pop, 50, alpha = 0.5)
+plt.hist(gen_pop, 50, alpha = 0.8)
 line1 = plt.axvline(mean, label = ('Среднее =' + str(round(mean, 1))),
                     color = 'blue', linestyle = 'dashed', linewidth = 3.5, alpha = 0.4)
 ax1.legend(handles = [line1], fontsize = 15)
 plt.show()
+
+n = 100
+for i in range(5):
+    sample = np.random.choice(gen_pop, n, replace = False)
+    sample_mean = np.mean(sample)
+    sem = stats.sem(sample)
+    fig = plt.figure(figsize = (8, 4))
+    ax1 = plt.subplot(111)
+    plt.hist(sample, 20, alpha = 0.8)
+    line1 = plt.axvline(sample_mean, label = ('Выборочное среднее: ' + str(round(sample_mean, 1))),
+                        color = 'blue', linestyle = 'dashed', linewidth = 3, alpha = 0.4)
+    line2 = plt.axvline(mean, label = ('Истинное среднее: ' + str(round(mean, 1))),
+                        color = 'yellow', linestyle = 'dashed', linewidth = 3, alpha = 0.4)
+    line3 = plt.axvline(sample_mean, label = ('Выборочная стандартная ошибка среднего: ' + str(round(sem, 1))),
+                        color = 'red', linestyle = 'dashed', linewidth = 3, alpha = 0.0)
+    ax1.legend(handles = [line1, line2, line3], fontsize = 10)
+    plt.show()
