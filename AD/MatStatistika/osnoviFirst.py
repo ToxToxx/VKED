@@ -233,3 +233,55 @@ plt.show()
 
 #Несмещенная оценка называется эффективной
 #среди рассм. оценок, если она имеет минимальную дисперсию
+n = 20
+est_1 = []
+est_2 = []
+
+for i in range(1000):
+    est_1.append(np.mean(np.random.choice(gen_pop, n, replace = False)))
+    est_2.append(np.median(np.random.choice(gen_pop, n, replace = False)))
+
+df_box_plot_est = pd.Dataframe()
+df_box_plot_est['est_1'] = est_1
+df_box_plot_est['est_2'] = est_2
+
+fig = plt.figure(figsize = (12, 6))
+sns.boxplot(data = df_box_plot_est, orient = 'h', showmeans = True)
+plt.show()
+#у кого меньший ящик сверху - тот лучше, ибо дисперсия меньше
+
+mean_1 = np.mean(est_1)
+mean_2 = np.mean(est_2)
+
+print(f'Среднее по выборкам оценки 1 - {round(mean_1, 1)}')
+print(f'Среднее по выборкам оценки 2 - {round(mean_2, 1)}')
+
+var_1 = np.var(est_1)
+var_2 = np.var(est_2)
+
+print(f'Дисперсия по выборкам оценки 1 - {round(var_1, 1)}')
+print(f'Дисперсия по выборкам оценки 2 - {round(var_2, 1)}')
+
+#обе ценки состоятельныи несмещнные, при этом оценка
+#среднего генеральной совокупности через среднее является эффективной оценкой
+#ибо меньшая дисперсия
+
+#ЭМПИРИЧЕСКИЕ ФУНКЦИИ РАСПРЕДЕЛЕНИЯ CDF И PDF
+#PDF - функция плотности вероятность - показывает вероятность распределения случайно величины
+#CDF - кумулятивная функция распределения дает интегральную картину
+#распределения вероятности задает вопрос "Какова вероятность того, что результат окажется меньше или равен такому-о?"
+
+fig = plt.figure(figsize = (14, 6))
+x = np.linspace(gen_pop.min(), gen_pop.max(), 100)
+mu = gen_pop.mean()
+sigma = gen_pop.std()
+y_pdf = stats.norm.pdf(x, mu, sigma)
+y_cdf = stats.norm.cdf(x, mu, sigma)
+
+plt.plot(x, y_cdf, label = 'cdf', color = 'r')
+plt.legend()
+plt.twinx()
+plt.plot(x, y_pdf, label = 'pdf', color = 'b')
+plt.legend()
+plt.show()
+
