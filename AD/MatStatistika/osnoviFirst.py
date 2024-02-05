@@ -93,3 +93,65 @@ sample = np.random.choice(gen_pop, n, replace = False)
 
 sample_mean = np.mean(sample)
 print('Ср ариф выборки: ', sample_mean)
+
+#Меры разброса
+#дисперсия - Разброс чего-либо и численная характеристика такого разброса
+#среднеквадратичное отклонение - Наиболее распространённый показатель рассеивания значений случайной величины относительно её математического ожидания
+#дисперсия
+var_ = np.var(gen_pop)
+
+#среднеквадратичное отклонение
+std_ = np.std(gen_pop)
+
+print('Дисперсия: ', var_, '\nСреднеквадратичное отклонение: ', std_)
+
+#выборочное среднеквадратичное отклонение
+std_sample = np.std(sample, ddof = 1) #деление на n-1 благодаря ddof
+print('Выбороченое среднекв откл: ', std_sample)
+
+iterations = 1000
+n = 20
+
+std_sample_l = []
+std_sample_l_corrected = []
+
+for i in range(iterations):
+    sample = np.random.choice(gen_pop, n, replace = False)
+    std_sample = np.std(sample)
+    std_sample_corrected = np.std(sample, ddof = 1)    
+    std_sample_l.append(std_sample)
+    std_sample_l_corrected.append(std_sample_corrected)
+
+fig = plt.figure(figsize = (15, 7))
+
+ax1 = plt.subplot(111)
+plt.hist(std_sample_l, alpha = 0.5, bins = 30)
+plt.hist(std_sample_l_corrected, alpha = 0.5, bins = 30)
+
+line1 = plt.axvline(std_, color = 'black', linestyle = 'dashed',
+                    linewidth = 4.5, label = 'std генеральной совокупности')
+line2 = plt.axvline(np.mean(std_sample_l), color = 'blue', linestyle = 'dashed',
+                    linewidth = 4.5, label = 'std выборки')
+line3 = plt.axvline(np.mean(std_sample_l_corrected), color = 'red', linestyle = 'dashed',
+                    linewidth = 4.5, label = 'std выборки скорректированная')
+
+plt.legend()
+plt.show()
+
+#СТАНДАРТНАЯ ОШИБКА СРЕДНЕГО - величина,
+#характеризующая стандартное отклонение выбранного срденго,
+#рассчитанное по выборке размера n из ген совокупности
+
+n = 20
+sample = np.random.choice(gen_pop, n, replace = False)
+#оценка стандартной ошибки по выборке
+print(stats.sem(sample))
+
+fig = plt.figure(figsize = (10, 5))
+
+ax1 = plt.subplot(111)
+plt.hist(gen_pop, 50, alpha = 0.5)
+line1 = plt.axvline(mean, label = ('Среднее =' + str(round(mean, 1))),
+                    color = 'blue', linestyle = 'dashed', linewidth = 3.5, alpha = 0.4)
+ax1.legend(handles = [line1], fontsize = 15)
+plt.show()
