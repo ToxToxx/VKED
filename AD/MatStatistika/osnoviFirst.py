@@ -172,3 +172,64 @@ for i in range(5):
                         color = 'red', linestyle = 'dashed', linewidth = 3, alpha = 0.0)
     ax1.legend(handles = [line1, line2, line3], fontsize = 10)
     plt.show()
+#чем больше выборка - тем меньше стандартная ошибка
+
+#оценка несмещена если её мат ожидание 
+#равно истинному значению оцененному параметру
+#асимптотическая несмещенность - более слабое услвоие,
+#мат ожидание сходится с истинным занчением параметра
+#с ростом объема выборки
+iterations = 5000
+n = 20
+
+std_sample_l = []
+std_sample_l_corrected = []
+
+est = []
+est_l = []
+
+for i in range(iterations):
+    sample = np.random.choice(gen_pop, n, replace = False)
+    std_sample = np.std(sample)
+    std_sample_corrected = np.std(sample, ddof = 1)
+    std_sample_l.append(std_sample)
+    std_sample_l_corrected.append(std_sample_corrected)
+    if i%20 == 0:
+        est.append(np.abs(np.mean(std_sample_l) - std_))
+        est_l.append(np.abs(np.mean(std_sample_l_corrected) - std_))
+
+fig = plt.figure(figsize = (12, 6))
+plt.plot(est)
+plt.plot(est_l)
+plt.show() #с ростом числа наблюдений оценка наклонения становится всё точнее
+#смешенная оценка становится всё больше и больше с точки зрения ошибки
+
+#Состоятельность = рпи бесконечном расширении выборки
+#оценка приходит к истинному значению
+est = []
+for i in range(10, 5000,10):
+    sample = np.mean(np.random.choice(gen_pop, i, replace = False))
+    est.append(sample)
+
+plt.figure(figsize = (14, 8))
+plt.plot(est, c = 'grey', alpha = 0.5)
+plt.hlines(mean, 0, 500, color = 'blue', lw = 2, label = 'среднее генеральной совокупности')
+plt.xlabel('количество наблюдений * 10', size = 12)
+plt.legend()
+plt.show()
+
+#пример несостоятельной оценки
+est = []
+for i in range(10, 5000,10):
+    sample = np.mean(np.random.choice(gen_pop, i, replace = False)) * (np.sqrt(i)/ i) * 30
+    est.append(sample)
+
+plt.figure(figsize = (14, 8))
+plt.plot(est, c = 'grey', alpha = 0.5)
+plt.hlines(mean, 0, 500, color = 'blue', lw = 2, label = 'среднее генеральной совокупности')
+plt.xlabel('количество наблюдений * 10', size = 12)
+plt.legend()
+plt.show()
+
+#Несмещенная оценка называется эффективной
+#среди рассм. оценок, если она имеет минимальную дисперсию
