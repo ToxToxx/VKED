@@ -241,7 +241,7 @@ for i in range(1000):
     est_1.append(np.mean(np.random.choice(gen_pop, n, replace = False)))
     est_2.append(np.median(np.random.choice(gen_pop, n, replace = False)))
 
-df_box_plot_est = pd.Dataframe()
+df_box_plot_est = pd.DataFrame()
 df_box_plot_est['est_1'] = est_1
 df_box_plot_est['est_2'] = est_2
 
