@@ -5,6 +5,8 @@ import numpy as np
 import pandas as pd
 from IPython.display import *
 
+np.random.seed(3106)
+
 #задача по вычислению является ли велика разница между транспортными средствами для курьеров
 distrib = stats.norm(loc = 35, scale = 10)
 gen_pop = distrib.rvs(size = 10000)
@@ -15,7 +17,6 @@ plt.hist(gen_pop, 100)
 plt.show()
 
 #извлекаем 3 случ совокупности по 50 заказов в каждой
-np.random.seed(3106)
 sample_groups = []
 for i in range(3):
     sample_groups.append(np.random.choice(gen_pop, size = 50).astype(int))
@@ -60,7 +61,17 @@ group_means_reshaped = group_means.reshape(num_of_groups, 1)
 SSW = np.sum((sample_groups - group_means_reshaped) ** 2)
 print('SSW ', SSW)
 
-#SSB
+#SSB - суммы отклонений груповых средних от среднего всей совокупности данных
 group_lengths = [x.shape[0] for x in sample_groups]
 SSB = np.sum((group_means - x_mean)** 2 * group_lengths)
 print('SSB ', SSB)
+
+#F - статистика критериев фишера
+m = num_of_groups
+N = np.sum(group_lengths)
+
+F = (SSB / (m-1)) / (SSW / (N - m))
+print('F ', F)
+
+F, p = stats.f_oneway(*sample_groups)
+print('F ', F)
