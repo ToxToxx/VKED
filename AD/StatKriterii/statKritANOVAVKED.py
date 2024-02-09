@@ -4,6 +4,7 @@ from scipy import stats
 import numpy as np
 import pandas as pd
 from IPython.display import *
+from tqdm.notebook import tqdm
 
 np.random.seed(3106)
 
@@ -84,8 +85,28 @@ print('F ', F)
 F_critical = stats.f.ppf(q = 1 - .05, dfn = m, dfd = N - m)
 print('F критическое ', F_critical)
 
-#   6) найденое значение К-наблюдаемое критерия сравнивается с К-критическим
+#   6) найденое значение К-наблюдаемое критерия сравнивается с К-критическим -  здесь F - F_CRITICAL - ФИШЕРА
 #и по результатам сравнения делается вывод
 print('Не можем отвергнуть гипотезу H0') if F < F_critical else print('H0 отвергается')
-print(p)
-print(p > 0.05)
+print('P значение', p) #Вероятность отвергнуть гипотезу, достигаемый уровень значимости
+#Вероятность получить такие или ещё более сильные различия между нашими группами при условии что различий нет
+print(p > 0.05) #Не можем отвергнуть гипотезу H0 ибо True
+
+#разбираемся с распределением F - извлекаем из ген совокупности выборки и считаем F
+def calculate_random_sample_group(sz=50, num_of_groups=3, gen_pop=np.random.normal(size=1000)):
+    sample_groups = []
+    for i in range(num_of_groups):
+        sample_groups.append(np.random.choice(gen_pop, size=sz))
+    F, _ = stats.f_oneway(*sample_groups)
+    return sample_groups, F
+
+Fs = []
+sgs = []
+for i in tqdm(range(10000)):
+    sg, F = calculate_random_sample_group()
+    Fs.append(F)
+    sgs.append(sg)
+#распределение приняло опр форму распределения Фишера по его статистикам принималиась решения
+plt.figure(figsize=(10, 6))
+plt.hist(Fs, bins=100)
+plt.show()
