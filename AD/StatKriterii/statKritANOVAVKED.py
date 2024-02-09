@@ -56,6 +56,11 @@ print('среднее по всем наблюдениям ', x_mean)
 group_means = sample_groups.mean(axis = 1)
 group_means_reshaped = group_means.reshape(num_of_groups, 1)
 
-#SSW
-ssw = np.mean((sample_groups - group_means_reshaped) ** 2)
-print('SSW ', ssw)
+#SSW - сумма средних квадратичных отклонений
+SSW = np.sum((sample_groups - group_means_reshaped) ** 2)
+print('SSW ', SSW)
+
+#SSB
+group_lengths = [x.shape[0] for x in sample_groups]
+SSB = np.sum((group_means - x_mean)** 2 * group_lengths)
+print('SSB ', SSB)
