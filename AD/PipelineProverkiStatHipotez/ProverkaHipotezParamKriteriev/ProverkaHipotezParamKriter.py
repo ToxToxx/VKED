@@ -1,8 +1,11 @@
 from scipy import stats
+from sklearn import datasets
+from statsmodels.stats.weightstats import ztest as ztest
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from statsmodels.stats.weightstats import ztest as ztest
+
+
 
 sample = [32.8, 44.3, 29. , 23.5, 26.7, 39. , 36.2, 25.6, 37.9, 36.5, 43.8,
        59.7, 37.7, 38.4, 32.1, 28.2, 34.4, 22.1, 12.6, 26.9, 29.9, 55.5,
@@ -78,10 +81,41 @@ sample_2 = [34.2, 35.4, 53.2, 37.8, 34.6, 31.4, 35.8, 40.4, 32.4, 29.8, 30.9,
 alternative= 'two-sided'
 
 #Z - test
-print('Z test', ztest(sample_1, sample_2,alternative = alternative)) #отвергаем 0 гипотезу
+print('Z test', ztest(sample_1, sample_2,alternative = alternative)) 
 
 # t-test
 print('t test', stats.ttest_ind(sample_1, sample_2, alternative = alternative))
 
 # W-test
 print('W test', stats.ttest_ind(sample_1, sample_2, alternative = alternative, equal_var = False))
+
+#отвергаем 0 гипотезу все 3 статистики об этом говорят
+
+#РЕШЕНИЕ ЗАДАЧИ О ФИЛЬМАХ
+ratings_1 = [
+       4.3, 5.8, 5.7, 5.4, 5.1, 5.7, 5.1, 5.4, 5.1, 4.6, 5.1, 4.8, 5. ,
+       5. , 5.2, 5.2, 4.7, 4.8, 5.4, 5.2, 5.5, 4.9, 5. , 5.5, 4.9, 4.4,
+       5.1, 5. , 4.5, 4.4, 5. , 5.1, 4.8, 5.1, 4.6, 5.3, 5. , 7. , 6.4,
+             3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3.4, 3. ,
+       3. , 4. , 4.4, 3.9, 3.5, 3.8, 3.8, 3.4, 3.7, 3.6,
+       6.8, 6.7, 6.7, 6.3, 6.5, 6.2, 5.9]
+
+ratings_2 = [3.5, 3. , 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3.4, 3. ,
+       3. , 4. , 4.4, 3.9, 3.5, 3.8, 3.8, 3.4, 3.7, 3.6, 3.3, 3.4, 3. ,
+       3.4, 3.5, 3.4, 3.2, 3.1, 3.4, 4.1, 4.2, 3.1, 3.2, 3.5, 3.6, 3. ,
+       3.4, 3.5, 2.3, 3.2, 3.5, 3.8, 3. , 3.8, 3.2, 3.7, 3.3, 3.2, 3.2,
+       3.1, 2.3, 2.8, 2.8, 3.3, 2.4, 2.9, 2.7, 2. , 3. , 2.2, 2.9, 2.9,
+       3.1, 3. , 2.7, 2.2, 2.5, 3.2, 2.8, 2.5, 2.8, 2.9, 3. , 2.8, 3. ,
+       2.9, 2.6, 2.4, 2.4, 2.7, 2.7, 3. , 3.4, 3.1, 2.3, 3. , 2.5, 2.6,
+       3. , 2.6, 2.3, 2.7, 3. , 2.9, 2.9, 2.5, 2.8, 3.3, 2.7, 3. , 2.9,
+       3. , 3. , 2.5, 2.9, 2.5, 3.6, 3.2, 2.7, 3. , 2.5, 2.8, 3.2, 3. ,
+       3.8, 2.6, 2.2, 3.2, 2.8, 2.8, 2.7, 3.3, 3.2, 2.8, 3. , 2.8, 3. ,
+       2.8, 3.8, 2.8, 2.8, 2.6, 3. , 3.4, 3.1, 3. , 3.1, 3.1, 3.1, 2.7,
+       3.2, 3.3, 3. , 2.5, 3. , 3.4, 3. ]
+
+print('RATINGS 1', stats.shapiro(ratings_1))
+print('RATINGS 2', stats.shapiro(ratings_2))
+#обе выборки не отвергают гипотезу нормальности
+
+print(stats.ttest_ind(ratings_1, ratings_2, alternative = 'greater', equal_var = False))
+#Вывод - из-за уровня значимости отвергаем гипотезу об отсутствии консервативности в пользу её присутствия 
