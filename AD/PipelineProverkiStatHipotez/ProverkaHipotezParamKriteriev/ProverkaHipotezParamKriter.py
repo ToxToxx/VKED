@@ -66,3 +66,22 @@ plt.axvline(t_crit, color='red', linestyle='dashed', linewidth=3, label = 't-к�
 plt.axvline(t, color='blue', linestyle='dashed', linewidth=1,label = 't-наблюдаемое')
 plt.legend()
 plt.show()
+#Вывод - новые компьютеры влияют на время сессии t наблюдаемое намного выше t критического
+
+#ДВУВЫБОРОЧНЫЙ КРИТЕРИЙ С БОЛЬШИМ ЧИСЛОМ НАБЛЮДЕНИЙ
+sample_1 = [32.8, 44.3, 29. , 23.5, 26.7, 39. , 36.2, 25.6, 37.9, 36.5, 43.8,
+       59.7, 37.7, 38.4, 32.1, 28.2, 34.4, 22.1, 12.6, 26.9, 29.9, 55.5,
+       34.1, 22.4, 25.4, 40. , 22.5, 38.8, 43.6, 34.4]
+sample_2 = [34.2, 35.4, 53.2, 37.8, 34.6, 31.4, 35.8, 40.4, 32.4, 29.8, 30.9,
+       52.5, 44. , 32.3, 39.3, 31.7, 48.3, 34.7, 41.1, 52.3, 38.8, 55.8,
+       35.4, 32.3, 31.4, 37.6, 33.3, 42.9, 48.9, 39.2]
+alternative= 'two-sided'
+
+#Z - test
+print('Z test', ztest(sample_1, sample_2,alternative = alternative)) #отвергаем 0 гипотезу
+
+# t-test
+print('t test', stats.ttest_ind(sample_1, sample_2, alternative = alternative))
+
+# W-test
+print('W test', stats.ttest_ind(sample_1, sample_2, alternative = alternative, equal_var = False))
