@@ -1,9 +1,11 @@
 from scipy import stats
 from sklearn import datasets
+from sklearn.utils import resample
 from statsmodels.stats.weightstats import ztest as ztest
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+
 
 
 
@@ -117,5 +119,77 @@ print('RATINGS 1', stats.shapiro(ratings_1))
 print('RATINGS 2', stats.shapiro(ratings_2))
 #обе выборки не отвергают гипотезу нормальности
 
-print(stats.ttest_ind(ratings_1, ratings_2, alternative = 'greater', equal_var = False))
+print('Критерий Уэлча', stats.ttest_ind(ratings_1, ratings_2, alternative = 'greater', equal_var = False))
+#проверяем что среднее больше чем во второй
 #Вывод - из-за уровня значимости отвергаем гипотезу об отсутствии консервативности в пользу её присутствия 
+
+
+#СВЯЗАННЫЕ КРИТЕРИИ С МАЛЫМ ЧИСЛОМ НАБЛЮДЕНИЙ
+#каждое наблюдение в паре или зависит от другого наблюдения другой выборки
+
+sample_1 = [32.8, 44.3, 29. , 23.5, 26.7, 39. , 36.2, 25.6, 37.9, 36.5, 43.8,
+       59.7, 37.7, 38.4, 32.1, 28.2, 34.4, 22.1, 12.6, 26.9, 29.9, 55.5,
+       34.1, 22.4, 25.4, 40. , 22.5, 38.8, 43.6, 34.4]
+sample_2 = [34.2, 35.4, 53.2, 37.8, 34.6, 31.4, 35.8, 40.4, 32.4, 29.8, 30.9,
+       52.5, 44. , 32.3, 39.3, 31.7, 48.3, 34.7, 41.1, 52.3, 38.8, 55.8,
+       35.4, 32.3, 31.4, 37.6, 33.3, 42.9, 48.9, 39.2]
+alternative= 'two-sided'
+
+print('Z статистика', stats.ttest_rel(sample_1,  sample_2, alternative = alternative))
+#отвергаем нашу 0 гипотезу о равенстве средних
+
+#БУТСТРАП
+#универсальное решение для проверки гипотезы
+#идея чтобы использовать результаты вычислений по выборкам 
+#как фиктвную популяцию, делается для того чтобы определить
+#выборочное распределение статистики при этмо фактически
+#анализируется множество фантомных выборок - бутстрапов
+#формируются выборки методом с возвращением
+#мы не получаем в бутстрапе новой информации
+#но разумно используем имеющиеся исходя из задачи
+#ограничение: выборка должна быть похожа с генеральной совокупностью
+
+#ЗАДАЧА НА ПРОВЕРКУ 90 ПРОЦЕНТИЛЯ И РЕШЕНИЯ КАКОЙ АЛГОРИТМ ЛУЧШЕ НОВЫЙ ИЛИ СТАРЫЙ
+#ГИПОТЕЗА ЧТО НОВЫЙ АЛГОРИТМ ЛУЧШЕ
+ln_distrib = stats.lognorm(0.5, loc = 20, scale = 7)
+old_version = ln_distrib.rvs(size=1000)
+
+ln_distrib = stats.lognorm(0.5, loc = 17, scale = 8.3)
+new_version = ln_distrib.rvs(size=1000)
+
+fig = plt.figure(figsize=(14, 3))
+ax1 = plt.subplot(121)
+plt.hist(old_version, 100, alpha=0.8)
+plt.title('Распределение времени работы старого алгоритма')
+
+ax1 = plt.subplot(122)
+plt.hist(new_version, 100, alpha=0.8, color = 'r')
+plt.title('Распределение времени работы нового алгоритма')
+
+plt.show()
+
+#РЕШЕНИЕ
+old_version_90p_boostrap_distribution = []
+new_version_90p_boostrap_distribution = []
+
+for i in range(1000):
+    sample_old_version = resample(old_version, replace=True, n_samples=100, random_state=i)
+    sample_new_version = resample(new_version, replace=True, n_samples=100, random_state=i)
+    
+    old_version_90p_boostrap_distribution.append(np.percentile(sample_old_version, 90))
+    new_version_90p_boostrap_distribution.append(np.percentile(sample_new_version, 90))
+
+fig = plt.figure(figsize=(14, 3))
+ax1 = plt.subplot(121)
+plt.hist(old_version_90p_boostrap_distribution, 100, alpha=0.8)
+
+ax1 = plt.subplot(122)
+plt.hist(new_version_90p_boostrap_distribution, 100, alpha=0.8, color = 'r')
+
+plt.show()
+
+t, p = stats.ttest_ind(old_version_90p_boostrap_distribution,
+                        new_version_90p_boostrap_distribution,
+                        alternative='greater')
+
+print(f't: {t}, p: {p}')
