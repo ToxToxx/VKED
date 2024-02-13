@@ -3,6 +3,7 @@ from sklearn import datasets
 from sklearn.utils import resample
 from statsmodels.stats.weightstats import ztest as ztest
 from statsmodels.stats.proportion import proportions_ztest
+from scipy.stats import chi2_contingency
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -249,3 +250,59 @@ def proportions_diff_z_test(z_stat, alternative = 'two-sided'):
     
 print('Доли выборок', proportions_diff_z_test(proportions_diff_z_stat_rel(survey_1,survey_2),'less' ))
 #Различаются доли в выборках
+
+#Качественные признаки
+#Признаки, которые не связаны между собой никакими 
+#арифметическими соотношениями упорядочить их также нельзя
+
+#Критерий Хи Квадрат
+#сравнение статистики ХК с распределением ХК
+
+#КХК независимости - нулевая гипотеза о независимости переменных
+
+#КХК равенства пропорций - независмые выборки
+#нул гипотеза распр переменной одинаково во всех ген совокупностей
+
+#КХК согласия - распр какой-либо катег переменной совпадает с задан распр
+
+banner_data = pd.DataFrame()
+banner_data['clicked'] = [100,400,500]
+banner_data['non_clicked'] = [200, 400,600]
+banner_data.index = ['Баннер_A', 'Баннер_B','Итого']
+banner_data['Total'] = banner_data['clicked'] + banner_data['non_clicked']
+
+print('Критерий незавимости ХК, клик на баннеры\n', banner_data)
+#Нулевая гипотеза кликабельность А И В схожа
+clicked_total = 500/1100
+non_clicked_total = 600/1100
+
+banner_A_clicked = clicked_total* 300
+banner_B_clicked = clicked_total* 800
+
+banner_A_non_clicked = non_clicked_total* 300
+banner_B_non_clicked = non_clicked_total* 800
+
+banner_data_E = pd.DataFrame()
+banner_data_E['clicked'] = [banner_A_clicked,banner_B_clicked,500]
+banner_data_E['non_clicked'] = [banner_A_non_clicked, banner_B_non_clicked,600]
+banner_data_E.index = ['Баннер_A', 'Баннер_B','Итого']
+banner_data_E['Total'] = banner_data_E['clicked'] + banner_data_E['non_clicked']
+print('Табл ожидаемых значений\n', banner_data_E) #Таблица ожидаемых значений
+
+
+chi2, p, dof, ex = chi2_contingency(banner_data.iloc[:2,:2])
+print('КХК', chi2,p,dof,ex)
+#Отвергаем нулевую гипотезу в пользу альтернативной
+
+#ТОЧНЫЙ ТЕСТ ФИШЕРА КРИТЕРИЙ 
+#можно применять с малым числом данных или разреженного распределения данных
+#можно применять с долями с малым количеством наблюдений
+#основан на переборе всех возможных вариантов заполнений таблицы
+#сопряженности при данной числ группы
+df = pd.DataFrame()
+df['active'] = [8,1]
+df['non_active'] = [2, 5]
+df.index = ['group_1', 'group_2']
+print('Группы', df)
+
+print('Критерий фишера', stats.fisher_exact(df))
