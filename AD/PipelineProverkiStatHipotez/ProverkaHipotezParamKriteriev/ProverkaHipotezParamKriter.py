@@ -2,6 +2,7 @@ from scipy import stats
 from sklearn import datasets
 from sklearn.utils import resample
 from statsmodels.stats.weightstats import ztest as ztest
+from statsmodels.stats.proportion import proportions_ztest
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -150,7 +151,7 @@ print('Z статистика', stats.ttest_rel(sample_1,  sample_2, alternative
 #ограничение: выборка должна быть похожа с генеральной совокупностью
 
 #ЗАДАЧА НА ПРОВЕРКУ 90 ПРОЦЕНТИЛЯ И РЕШЕНИЯ КАКОЙ АЛГОРИТМ ЛУЧШЕ НОВЫЙ ИЛИ СТАРЫЙ
-#ГИПОТЕЗА ЧТО НОВЫЙ АЛГОРИТМ ЛУЧШЕ
+#ГИПОТЕЗА НУЛЕВАЯ ЧТО ОНИ ОДИНАКОВЫ
 ln_distrib = stats.lognorm(0.5, loc = 20, scale = 7)
 old_version = ln_distrib.rvs(size=1000)
 
@@ -193,3 +194,58 @@ t, p = stats.ttest_ind(old_version_90p_boostrap_distribution,
                         alternative='greater')
 
 print(f't: {t}, p: {p}')
+#p слишком мало - отвергаем гипотезу в пользу альтернативной
+
+#ОЦЕНКА ДОЛЕЙ
+#ГИПОТЕЗА ДОЛЯ РАВНЯЕТСЯ p - является ли конверсия случайной или нет
+#одновыб критерий с большим числ набл
+count = np.array(100)
+nobs = np.array(300)
+value = 0.5
+print('Стистика доли', proportions_ztest(count, nobs, value = value))
+#отвергаем в пользу альтернативной - посещений клиентво не случайный
+
+#двувыборочный критерий с большим числом набл незав выборок
+#имеется распр Бернули
+#Гипотеза о равенстве долей
+count = np.array([100, 400])
+nobs = np.array([300, 800])
+print('Статистика о равенстве долей', proportions_ztest(count, nobs, alternative='smaller'))
+#отвергаем в пользу альтернативной
+
+#ЗАДАЧА ОБ ОПЫТЕ ПРИЛОЖЕНИЯ ДОСТАВКИ ЕДЫ
+#ГИПОТЕЗА О ТОМ ЧТО ПРОМОКДЫ УВЕЛИЧИВАЮТ ПОЛОЖ ОПЫТ ОТ ИСП ДОСТАВКИ
+survey_1 = [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1,
+       1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0,
+       0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0,
+       1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1,
+       1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0]
+survey_2 = [0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0,
+       1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1,
+       0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1,
+       0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0,
+       1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0]
+
+def proportions_diff_z_stat_rel(sample1, sample2):
+    sample = zip(sample1, sample2)
+    n = len(sample1)
+    
+    f = sum([1 if (x[0] == 1 and x[1] == 0) else 0 for x in sample])
+    g = sum([1 if (x[0] == 0 and x[1] == 1) else 0 for x in sample])
+    
+    return float(f - g) / np.sqrt(f + g - float((f - g)**2) / n )
+
+def proportions_diff_z_test(z_stat, alternative = 'two-sided'):
+    
+    if alternative == 'two-sided':
+        return z_stat, 2 * (1 - stats.norm.cdf(np.abs(z_stat)))
+    
+    if alternative == 'less':
+        return z_stat, stats.norm.cdf(z_stat)
+
+    if alternative == 'greater':
+        return z_stat, 1 - stats.norm.cdf(z_stat)
+    
+    
+print('Доли выборок', proportions_diff_z_test(proportions_diff_z_stat_rel(survey_1,survey_2),'less' ))
+#Различаются доли в выборках
